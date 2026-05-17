@@ -20,7 +20,7 @@ app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024   # 5 MB
 
 GEMINI_URL = (
     "https://generativelanguage.googleapis.com/v1beta"
-    "/models/gemini-1.5-flash-latest:generateContent"
+    "/models/gemini-2.0-flash:generateContent"
 )
 
 SYSTEM_CONTEXT = """You are Dr. HealthNG AI, a medical assistant specialized in Nigerian healthcare.
