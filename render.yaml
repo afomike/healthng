@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: healthng-ai
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true        # Render auto-generates a secure value
+      - key: GEMINI_API_KEY
+        sync: false                # You paste this manually in Render dashboard
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.11.0
