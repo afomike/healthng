@@ -475,7 +475,14 @@ def configured_providers() -> list:
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    # Serve the public landing page (marketing/hero) at root
+    return render_template("landing.html")
+
+
+@app.route("/app")
+def app_page():
+    # Serve the live platform UI (app shell) here
+    return render_template("app.html")
 
 
 # ── API endpoints ─────────────────────────────────────────────────────────────

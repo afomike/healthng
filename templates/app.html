@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthNG — Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-block">
+      <div class="brand-mark">H</div>
+      <div class="brand-copy">
+        <span class="brand-name">HealthNG</span>
+        <span class="brand-tag">Provider platform</span>
+      </div>
+    </div>
+
+    <nav class="site-nav">
+      <a href="/">Landing</a>
+      <a href="/app">Platform</a>
+    </nav>
+
+    <a class="button button-secondary" href="mailto:sales@healthng.com">Request Demo</a>
+  </header>
+
+  <main class="page-content">
+    <section class="app-preview-section" aria-label="Live platform">
+      <div class="section-heading">
+        <span class="eyebrow">Live platform</span>
+        <h2>Explore the HealthNG care operations interface.</h2>
+      </div>
+      <div class="app-shell preview-shell">
+        <aside class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-mark">
+              <div class="logo-icon">H</div>
+              <span class="logo-name">HealthNG</span>
+            </div>
+            <div class="logo-sub">Provider operations · Nigeria</div>
+          </div>
+
+          <nav class="nav-section">
+            <div class="nav-label">Navigation</div>
+            <button class="nav-item active" data-view="dashboard"><span class="nav-icon">⊞</span> Dashboard</button>
+            <button class="nav-item" data-view="symptom"><span class="nav-icon">🩺</span> Symptom Checker</button>
+            <button class="nav-item" data-view="consult"><span class="nav-icon">💬</span> Clinical Assistant</button>
+            <button class="nav-item" data-view="rag"><span class="nav-icon">📄</span> Document Intelligence</button>
+            <button class="nav-item" data-view="diseases"><span class="nav-icon">🦟</span> Local Diseases</button>
+            <button class="nav-item" data-view="prevention"><span class="nav-icon">💊</span> Preventive Care</button>
+          </nav>
+          <div class="ng-flag">
+            <div class="flag-strip"><span class="g"></span><span class="w"></span><span class="g"></span></div>
+            <span class="flag-label">Nigeria-first</span>
+          </div>
+        </aside>
+
+        <div class="main">
+          <header class="topbar">
+            <div class="topbar-title" id="topbar-title">Dashboard</div>
+            <div class="topbar-actions">
+              <span class="status-dot" id="status-dot" title="Checking AI status…"></span>
+              <span class="status-label" id="status-label">Checking status…</span>
+              <div class="user-avatar">NG</div>
+            </div>
+          </header>
+
+          <div class="content-area">
+            <section class="view active" id="view-dashboard">
+              <div class="stats-row">
+                <div class="stat-card"><div class="stat-val">36</div><div class="stat-label">States covered</div></div>
+                <div class="stat-card"><div class="stat-val">47+</div><div class="stat-label">Protocol modules</div></div>
+                <div class="stat-card"><div class="stat-val">92%</div><div class="stat-label">Operational readiness</div></div>
+                <div class="stat-card"><div class="stat-val">AI</div><div class="stat-label">Clinical insight engine</div></div>
+              </div>
+              <div class="card">
+                <div class="card-title">Active health alerts — Nigeria</div>
+                <div class="alert-list">
+                  <div class="alert-row alert-high"><span>Cholera outbreak — Rivers State</span><span class="risk-badge risk-high">High risk</span></div>
+                  <div class="alert-row alert-med"><span>Malaria surge — South-West regions</span><span class="risk-badge risk-med">Moderate</span></div>
+                  <div class="alert-row alert-low"><span>Meningitis monitoring — Northern belt</span><span class="risk-badge risk-low">Watch</span></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

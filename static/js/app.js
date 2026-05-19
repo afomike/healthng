@@ -50,16 +50,18 @@ function setResult(textEl, cardEl, text) {
 const App = {
 
   init() {
-    this.checkStatus();
-    this.buildSymptomPills();
-    this.buildDiseaseList();
-    this.bindNav();
-    this.bindChat();
-    this.bindUpload();
-    this.bindQuickPrompts();
-    this.bindDashboardChips();
-    this.bindPreventionChips();
-    this.bindDiseaseTabs();
+    const has = (sel) => !!document.querySelector(sel);
+
+    if (has('#status-dot') || has('#status-label')) this.checkStatus();
+    if (has('#symptom-pills')) this.buildSymptomPills();
+    if (has('#disease-tab-endemic')) this.buildDiseaseList();
+    if (has('.nav-item')) this.bindNav();
+    if (has('#send-btn') || has('#chat-input')) this.bindChat();
+    if (has('#upload-zone') || has('#file-input')) this.bindUpload();
+    if (has('.qp-btn')) this.bindQuickPrompts();
+    if (has('.disease-chip')) this.bindDashboardChips();
+    if (has('[data-prevention]')) this.bindPreventionChips();
+    if (has('#disease-tabs')) this.bindDiseaseTabs();
   },
 
   // ── Status check ──────────────────────────────────────────────────────────
