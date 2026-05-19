@@ -31,8 +31,8 @@ def _key(name):
 GROQ_API_KEY       = _key("GROQ_API_KEY")
 TOGETHER_API_KEY   = _key("TOGETHER_API_KEY")
 OPENROUTER_API_KEY = _key("OPENROUTER_API_KEY")
-CF_ACCOUNT_ID      = _key("CF_ACCOUNT_ID")
-CF_API_TOKEN       = _key("CF_API_TOKEN")
+# CF_ACCOUNT_ID      = _key("CF_ACCOUNT_ID")  # DISABLED: Cloudflare API no longer used
+# CF_API_TOKEN       = _key("CF_API_TOKEN")    # DISABLED: Cloudflare API no longer used
 HF_API_KEY         = _key("HF_API_KEY")
 GEMINI_API_KEY     = _key("GEMINI_API_KEY")
 
@@ -227,56 +227,59 @@ def call_openrouter(prompt):
     raise ProviderQuotaError("All OpenRouter models quota/unavailable")
 
 
-# ── 4. Cloudflare Workers AI ──────────────────────────────────────────────────
-CF_MODELS = [
-    "@cf/meta/llama-3.1-8b-instruct",
-    "@cf/mistral/mistral-7b-instruct-v0.1",
-    "@cf/google/gemma-7b-it",
-    "@cf/microsoft/phi-2",
-]
-
-def call_cloudflare(prompt):
-    if not CF_ACCOUNT_ID or not CF_API_TOKEN:
-        raise ProviderQuotaError("Cloudflare credentials not configured")
-    for model in CF_MODELS:
-        try:
-            resp = requests.post(
-                f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{model}",
-                headers={"Authorization": f"Bearer {CF_API_TOKEN}",
-                         "Content-Type": "application/json"},
-                json={
-                    "messages": [
-                        {"role": "system", "content": SYSTEM_CONTEXT},
-                        {"role": "user",   "content": prompt},
-                    ],
-                    "max_tokens": 1500,
-                },
-                timeout=30,
-            )
-            if resp.ok:
-                data = resp.json()
-                # Cloudflare returns result.response (string) or choices list
-                text = (
-                    data.get("result", {}).get("response")
-                    or (data.get("result", {}).get("choices") or [{}])[0]
-                       .get("message", {}).get("content", "")
-                )
-                if text and text.strip():
-                    log.info(f"Cloudflare success ({model})")
-                    return text, None
-            code = resp.status_code
-            msg  = resp.json().get("errors", [{}])[0].get("message", "unknown")
-            log.warning(f"Cloudflare {model} -> {code}: {msg[:100]}")
-            if _is_quota_error(code, msg):
-                continue
-            return None, f"Cloudflare error: {msg}"
-        except requests.exceptions.Timeout:
-            log.warning(f"Cloudflare {model} timed out")
-            continue
-        except Exception as e:
-            log.warning(f"Cloudflare {model} exception: {e}")
-            continue
-    raise ProviderQuotaError("All Cloudflare models quota/unavailable")
+# ── 4. Cloudflare Workers AI ── DISABLED ──────────────────────────────────────
+# CLOUDFLARE API IMPLEMENTATION HAS BEEN DISABLED
+# To re-enable, uncomment the CF_ACCOUNT_ID and CF_API_TOKEN variables above,
+# and uncomment the call_cloudflare function, then add it back to PROVIDERS list
+# 
+# CF_MODELS = [
+#     "@cf/meta/llama-3.1-8b-instruct",
+#     "@cf/mistral/mistral-7b-instruct-v0.1",
+#     "@cf/google/gemma-7b-it",
+#     "@cf/microsoft/phi-2",
+# ]
+# 
+# def call_cloudflare(prompt):
+#     if not CF_ACCOUNT_ID or not CF_API_TOKEN:
+#         raise ProviderQuotaError("Cloudflare credentials not configured")
+#     for model in CF_MODELS:
+#         try:
+#             resp = requests.post(
+#                 f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{model}",
+#                 headers={"Authorization": f"Bearer {CF_API_TOKEN}",
+#                          "Content-Type": "application/json"},
+#                 json={
+#                     "messages": [
+#                         {"role": "system", "content": SYSTEM_CONTEXT},
+#                         {"role": "user",   "content": prompt},
+#                     ],
+#                     "max_tokens": 1500,
+#                 },
+#                 timeout=30,
+#             )
+#             if resp.ok:
+#                 data = resp.json()
+#                 text = (
+#                     data.get("result", {}).get("response")
+#                     or (data.get("result", {}).get("choices") or [{}])[0]
+#                        .get("message", {}).get("content", "")
+#                 )
+#                 if text and text.strip():
+#                     log.info(f"Cloudflare success ({model})")
+#                     return text, None
+#             code = resp.status_code
+#             msg  = resp.json().get("errors", [{}])[0].get("message", "unknown")
+#             log.warning(f"Cloudflare {model} -> {code}: {msg[:100]}")
+#             if _is_quota_error(code, msg):
+#                 continue
+#             return None, f"Cloudflare error: {msg}"
+#         except requests.exceptions.Timeout:
+#             log.warning(f"Cloudflare {model} timed out")
+#             continue
+#         except Exception as e:
+#             log.warning(f"Cloudflare {model} exception: {e}")
+#             continue
+#     raise ProviderQuotaError("All Cloudflare models quota/unavailable")
 
 
 # ── 5. Hugging Face Inference API ─────────────────────────────────────────────
@@ -413,7 +416,7 @@ PROVIDERS = [
     ("Groq",          call_groq),
     ("Together AI",   call_together),
     ("OpenRouter",    call_openrouter),
-    ("Cloudflare",    call_cloudflare),
+    # ("Cloudflare",    call_cloudflare),  # DISABLED: Cloudflare API no longer used
     ("HuggingFace",   call_huggingface),
     ("Gemini",        call_gemini),
 ]
@@ -462,7 +465,7 @@ def configured_providers() -> list:
     if GROQ_API_KEY:       active.append("Groq")
     if TOGETHER_API_KEY:   active.append("Together AI")
     if OPENROUTER_API_KEY: active.append("OpenRouter")
-    if CF_ACCOUNT_ID and CF_API_TOKEN: active.append("Cloudflare")
+    # if CF_ACCOUNT_ID and CF_API_TOKEN: active.append("Cloudflare")  # DISABLED
     if HF_API_KEY:         active.append("HuggingFace")
     if GEMINI_API_KEY:     active.append("Gemini")
     return active

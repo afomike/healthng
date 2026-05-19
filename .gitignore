@@ -1,5 +1,6 @@
 # Environment — NEVER commit this
 .env
+.env.example
 
 # Python
 __pycache__/
