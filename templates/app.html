@@ -68,6 +68,7 @@
           </header>
 
           <div class="content-area">
+            <!-- Dashboard view -->
             <section class="view active" id="view-dashboard">
               <div class="stats-row">
                 <div class="stat-card"><div class="stat-val">36</div><div class="stat-label">States covered</div></div>
@@ -82,6 +83,98 @@
                   <div class="alert-row alert-med"><span>Malaria surge — South-West regions</span><span class="risk-badge risk-med">Moderate</span></div>
                   <div class="alert-row alert-low"><span>Meningitis monitoring — Northern belt</span><span class="risk-badge risk-low">Watch</span></div>
                 </div>
+              </div>
+            </section>
+
+            <!-- Symptom checker view -->
+            <section class="view" id="view-symptom">
+              <div class="card">
+                <div class="card-title">Symptom Checker</div>
+                <div id="symptom-pills" class="symptom-grid"></div>
+                <div class="custom-symptom-row">
+                  <input id="custom-symptom" placeholder="Add a custom symptom" />
+                  <button class="btn-outline" onclick="App.addCustomSymptom()">Add</button>
+                </div>
+                <div class="ctx-grid" style="margin-top:12px;">
+                  <div>
+                    <label class="form-label">Age group</label>
+                    <select id="ctx-age"><option>Adult (18-60)</option><option>Child (0-17)</option><option>Senior (60+)</option></select>
+                  </div>
+                  <div>
+                    <label class="form-label">Gender</label>
+                    <select id="ctx-gender"><option>Not specified</option><option>Male</option><option>Female</option></select>
+                  </div>
+                </div>
+                <div class="ctx-grid" style="margin-top:8px;">
+                  <div>
+                    <label class="form-label">State / Region</label>
+                    <select id="ctx-state"><option>Nigeria</option></select>
+                  </div>
+                  <div>
+                    <label class="form-label">Duration</label>
+                    <select id="ctx-duration"><option>Unknown</option><option>Days</option><option>Weeks</option></select>
+                  </div>
+                </div>
+                <textarea id="extra-notes" placeholder="Extra notes (optional)"></textarea>
+                <div style="margin-top:12px;"><button class="btn-green" onclick="App.runSymptomCheck()">Run check</button></div>
+                <div id="symptom-result" class="card" style="display:none;margin-top:12px;"><div id="symptom-result-text" class="result-text"></div></div>
+              </div>
+            </section>
+
+            <!-- Clinical assistant (chat) view -->
+            <section class="view" id="view-consult">
+              <div class="chat-container">
+                <div class="chat-header"><div class="ai-avatar">AI</div><div class="chat-name">Dr. HealthNG</div><div class="chat-sub">Clinical assistant</div></div>
+                <div id="chat-messages" class="chat-messages"></div>
+                <div class="chat-input-area">
+                  <textarea id="chat-input" placeholder="Ask a clinical question..."></textarea>
+                  <button id="send-btn" class="send-btn">➤</button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Document intelligence (RAG) view -->
+            <section class="view" id="view-rag">
+              <div class="card">
+                <div class="card-title">Document Intelligence</div>
+                <div id="upload-zone" class="upload-zone">Click or drop files to upload</div>
+                <input id="file-input" type="file" style="display:none;" />
+                <div id="doc-list-card" class="card" style="display:none;margin-top:12px;"><div id="doc-list" class="doc-list"></div></div>
+                <textarea id="rag-query" placeholder="Ask about uploaded docs or general medical questions"></textarea>
+                <div class="rag-btn-row"><button class="btn-green" onclick="App.queryDocs(false)">Query with docs</button><button class="btn-outline" onclick="App.queryDocs(true)">General query</button></div>
+                <div id="rag-result" class="card" style="display:none;margin-top:12px;"><div id="rag-result-text"></div></div>
+              </div>
+            </section>
+
+            <!-- Diseases view -->
+            <section class="view" id="view-diseases">
+              <div class="card">
+                <div class="card-title">Nigerian Diseases</div>
+                <div id="disease-tabs">
+                  <button class="s-tab active" data-tab="endemic">Endemic</button>
+                  <button class="s-tab" data-tab="genetic">Genetic</button>
+                  <button class="s-tab" data-tab="nutrition">Nutrition</button>
+                </div>
+                <div id="disease-tab-endemic" style="margin-top:12px;"></div>
+                <div id="disease-tab-genetic" style="display:none;margin-top:12px;"></div>
+                <div id="disease-tab-nutrition" style="display:none;margin-top:12px;"></div>
+                <div id="disease-detail" class="card" style="display:none;margin-top:12px;">
+                  <div class="card-title" id="disease-detail-name"></div>
+                  <div id="disease-detail-text"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Prevention view -->
+            <section class="view" id="view-prevention">
+              <div class="card">
+                <div class="card-title">Prevention & Care</div>
+                <div class="disease-grid">
+                  <div class="disease-chip" data-prevention="malaria">Malaria prevention</div>
+                  <div class="disease-chip" data-prevention="cholera">Cholera prevention</div>
+                  <div class="disease-chip" data-prevention="yellow-fever">Vaccination guidance</div>
+                </div>
+                <div id="prevention-result" class="card" style="display:none;margin-top:12px;"><div id="prevention-result-text"></div></div>
               </div>
             </section>
           </div>
