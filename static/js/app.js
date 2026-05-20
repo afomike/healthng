@@ -40,9 +40,96 @@ async function api(path, body) {
 }
 
 function setResult(textEl, cardEl, text) {
-  textEl.textContent = text;
+  // Render plain or Markdown-like text into structured, safe HTML
+  try {
+    if (typeof renderRichText === 'function') {
+      textEl.innerHTML = renderRichText(text || '');
+    } else {
+      textEl.textContent = text;
+    }
+  } catch (e) {
+    textEl.textContent = text;
+  }
   cardEl.style.display = 'block';
   cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Lightweight, safe renderer for simple Markdown-like output returned by backend.
+// Supports: numbered sections, unordered lists (*,+,-), bold (**text**), links (http(s)://...)
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function inlineFormat(s) {
+  if (!s) return '';
+  // bold **text**
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // inline code `code`
+  s = s.replace(/`([^`]+?)`/g, '<code>$1</code>');
+  // links
+  s = s.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  return s;
+}
+
+function renderRichText(input) {
+  const text = input == null ? '' : String(input);
+  const esc = escapeHtml(text);
+  const lines = esc.split(/\r?\n/);
+  let out = '';
+  let inUl = false;
+  let inOl = false;
+
+  function closeLists() {
+    if (inUl) { out += '</ul>'; inUl = false; }
+    if (inOl) { out += '</ol>'; inOl = false; }
+  }
+
+  for (let rawLine of lines) {
+    const line = rawLine.trim();
+    if (!line) {
+      closeLists();
+      out += '<p></p>';
+      continue;
+    }
+
+    // numbered list item like '1. Text' or '2) Text'
+    const numMatch = line.match(/^(\d+)[\.)]\s+(.+)$/);
+    const ulMatch = line.match(/^[-\*\+]\s+(.+)$/);
+    if (numMatch) {
+      if (inUl) { out += '</ul>'; inUl = false; }
+      if (!inOl) { out += '<ol>'; inOl = true; }
+      out += '<li>' + inlineFormat(numMatch[2]) + '</li>';
+      continue;
+    }
+    if (ulMatch) {
+      if (inOl) { out += '</ol>'; inOl = false; }
+      if (!inUl) { out += '<ul>'; inUl = true; }
+      out += '<li>' + inlineFormat(ulMatch[1]) + '</li>';
+      continue;
+    }
+
+    // Section heading like '1. **Title**: description' handled as paragraph but bold preserved
+    const headingMatch = line.match(/^\d+\.\s+\*\*(.+?)\*\*:?(.*)$/);
+    if (headingMatch) {
+      closeLists();
+      out += '<h3>' + inlineFormat(headingMatch[1]) + '</h3>';
+      if (headingMatch[2] && headingMatch[2].trim()) out += '<p>' + inlineFormat(headingMatch[2].trim()) + '</p>';
+      continue;
+    }
+
+    // Default paragraph
+    closeLists();
+    out += '<p>' + inlineFormat(line) + '</p>';
+  }
+
+  closeLists();
+  return out;
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────

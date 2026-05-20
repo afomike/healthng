@@ -1361,7 +1361,36 @@ textarea {
 .result-text {
   color: var(--text);
   line-height: 1.7;
-  white-space: pre-wrap;
+  white-space: normal;
+}
+
+.result-text p {
+  margin: 0 0 12px 0;
+}
+
+.result-text h3 {
+  margin: 12px 0 8px 0;
+  font-size: 1.05rem;
+  color: var(--primary-strong);
+}
+
+.result-text ul,
+.result-text ol {
+  margin: 8px 0 12px 20px;
+}
+
+.result-text li {
+  margin-bottom: 6px;
+}
+
+.result-text a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.result-text strong {
+  color: var(--text);
+}
 }
 
 /* ── Disease List & Chips ─────────────────────────────────────────────────── */
