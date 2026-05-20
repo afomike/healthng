@@ -407,7 +407,10 @@ const App = {
     });
   },
 
-  astext.innerHTML = '';
+  async loadDiseaseDetail(name) {
+    const card = document.getElementById('disease-detail');
+    const text = document.getElementById('disease-detail-text');
+    text.innerHTML = '';
     document.getElementById('disease-detail-name').textContent = name;
     setResult(text, card, `Loading information about ${name}…`);
     try {
@@ -416,10 +419,7 @@ const App = {
       setResult(text, card, data.result);
     } catch (e) {
       text.innerHTML = '';
-      appendResultBubble(text, `Error: ${e.message}`, false)o', { disease: name });
-      text.textContent = data.result;
-    } catch (e) {
-      text.textContent = `Error: ${e.message}`;
+      appendResultBubble(text, `Error: ${e.message}`, false);
     }
   },
 
