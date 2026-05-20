@@ -39,20 +39,28 @@ async function api(path, body) {
   return data;
 }
 
+function normalizeResponseText(text) {
+  if (!text) return '';
+  const value = String(text);
+  if (!/[#*]/.test(value)) return value;
+  return value.replace(/[#*]/g, '');
+}
+
 function setResult(textEl, cardEl, text) {
   // Clear previous results
   textEl.innerHTML = '';
+  const normalized = normalizeResponseText(text || '');
   
   // Render plain or Markdown-like text into structured, safe HTML
   try {
     if (typeof renderRichText === 'function') {
-      const html = renderRichText(text || '');
+      const html = renderRichText(normalized);
       appendResultBubble(textEl, html, true);
     } else {
-      appendResultBubble(textEl, text || '', true);
+      appendResultBubble(textEl, normalized, true);
     }
   } catch (e) {
-    appendResultBubble(textEl, text || '', true);
+    appendResultBubble(textEl, normalized, true);
   }
   cardEl.style.display = 'block';
   cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
