@@ -117,7 +117,10 @@
                 </div>
                 <textarea id="extra-notes" placeholder="Extra notes (optional)"></textarea>
                 <div style="margin-top:12px;"><button class="btn-green" onclick="App.runSymptomCheck()">Run check</button></div>
-                <div id="symptom-result" class="card" style="display:none;margin-top:12px;"><div id="symptom-result-text" class="result-text"></div></div>
+                <div id="symptom-result" class="result-container" style="display:none;margin-top:12px;">
+                  <div class="result-header"><div class="result-avatar">✓</div><div class="result-title">Analysis Result</div><div class="result-subtitle">AI-powered assessment</div></div>
+                  <div id="symptom-result-text" class="result-messages"></div>
+                </div>
               </div>
             </section>
 
@@ -142,7 +145,10 @@
                 <div id="doc-list-card" class="card" style="display:none;margin-top:12px;"><div id="doc-list" class="doc-list"></div></div>
                 <textarea id="rag-query" placeholder="Ask about uploaded docs or general medical questions"></textarea>
                 <div class="rag-btn-row"><button class="btn-green" onclick="App.queryDocs(false)">Query with docs</button><button class="btn-outline" onclick="App.queryDocs(true)">General query</button></div>
-                <div id="rag-result" class="card" style="display:none;margin-top:12px;"><div id="rag-result-text"></div></div>
+                <div id="rag-result" class="result-container" style="display:none;margin-top:12px;">
+                  <div class="result-header"><div class="result-avatar">📚</div><div class="result-title">Search Results</div><div class="result-subtitle">Intelligence engine</div></div>
+                  <div id="rag-result-text" class="result-messages"></div>
+                </div>
               </div>
             </section>
 
@@ -158,9 +164,9 @@
                 <div id="disease-tab-endemic" style="margin-top:12px;"></div>
                 <div id="disease-tab-genetic" style="display:none;margin-top:12px;"></div>
                 <div id="disease-tab-nutrition" style="display:none;margin-top:12px;"></div>
-                <div id="disease-detail" class="card" style="display:none;margin-top:12px;">
-                  <div class="card-title" id="disease-detail-name"></div>
-                  <div id="disease-detail-text"></div>
+                <div id="disease-detail" class="result-container" style="display:none;margin-top:12px;">
+                  <div class="result-header"><div class="result-avatar">🦟</div><div class="result-title" id="disease-detail-name">Disease Information</div><div class="result-subtitle">Epidemiological profile</div></div>
+                  <div id="disease-detail-text" class="result-messages"></div>
                 </div>
               </div>
             </section>
@@ -174,7 +180,10 @@
                   <div class="disease-chip" data-prevention="cholera">Cholera prevention</div>
                   <div class="disease-chip" data-prevention="yellow-fever">Vaccination guidance</div>
                 </div>
-                <div id="prevention-result" class="card" style="display:none;margin-top:12px;"><div id="prevention-result-text"></div></div>
+                <div id="prevention-result" class="result-container" style="display:none;margin-top:12px;">
+                  <div class="result-header"><div class="result-avatar">💊</div><div class="result-title">Prevention & Care Guide</div><div class="result-subtitle">Evidence-based recommendations</div></div>
+                  <div id="prevention-result-text" class="result-messages"></div>
+                </div>
               </div>
             </section>
           </div>

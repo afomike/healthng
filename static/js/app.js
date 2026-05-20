@@ -40,18 +40,37 @@ async function api(path, body) {
 }
 
 function setResult(textEl, cardEl, text) {
+  // Clear previous results
+  textEl.innerHTML = '';
+  
   // Render plain or Markdown-like text into structured, safe HTML
   try {
     if (typeof renderRichText === 'function') {
-      textEl.innerHTML = renderRichText(text || '');
+      const html = renderRichText(text || '');
+      appendResultBubble(textEl, html, true);
     } else {
-      textEl.textContent = text;
+      appendResultBubble(textEl, text || '', true);
     }
   } catch (e) {
-    textEl.textContent = text;
+    appendResultBubble(textEl, text || '', true);
   }
   cardEl.style.display = 'block';
   cardEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function appendResultBubble(containerEl, content, isHtml = false) {
+  const bubble = document.createElement('div');
+  bubble.className = 'result-bubble';
+  bubble.style.animation = 'slideIn .3s ease-out';
+  
+  if (isHtml) {
+    bubble.innerHTML = content;
+  } else {
+    bubble.textContent = content;
+  }
+  
+  containerEl.appendChild(bubble);
+  containerEl.scrollTop = containerEl.scrollHeight;
 }
 
 // Lightweight, safe renderer for simple Markdown-like output returned by backend.
@@ -225,6 +244,7 @@ const App = {
     if (!selectedSymptoms.length) { alert('Please select at least one symptom.'); return; }
     const rc = document.getElementById('symptom-result');
     const rt = document.getElementById('symptom-result-text');
+    rt.innerHTML = '';
     setResult(rt, rc, 'Analyzing…');
     try {
       const data = await api('/api/symptom-check', {
@@ -235,9 +255,11 @@ const App = {
         duration: document.getElementById('ctx-duration').value,
         notes:    document.getElementById('extra-notes').value,
       });
-      rt.textContent = data.result;
+      rt.innerHTML = '';
+      setResult(rt, rc, data.result);
     } catch (e) {
-      rt.textContent = `Error: ${e.message}`;
+      rt.innerHTML = '';
+      appendResultBubble(rt, `Error: ${e.message}`, false);
     }
   },
 
@@ -343,12 +365,15 @@ const App = {
     if (!query) { alert('Please enter a query.'); return; }
     const rc = document.getElementById('rag-result');
     const rt = document.getElementById('rag-result-text');
+    rt.innerHTML = '';
     setResult(rt, rc, 'Searching…');
     try {
       const data = await api('/api/query-docs', { query, general });
-      rt.textContent = data.result;
+      rt.innerHTML = '';
+      setResult(rt, rc, data.result);
     } catch (e) {
-      rt.textContent = `Error: ${e.message}`;
+      rt.innerHTML = '';
+      appendResultBubble(rt, `Error: ${e.message}`, false);
     }
   },
 
@@ -382,13 +407,16 @@ const App = {
     });
   },
 
-  async loadDiseaseDetail(name) {
-    const card = document.getElementById('disease-detail');
-    const text = document.getElementById('disease-detail-text');
+  astext.innerHTML = '';
     document.getElementById('disease-detail-name').textContent = name;
     setResult(text, card, `Loading information about ${name}…`);
     try {
       const data = await api('/api/disease-info', { disease: name });
+      text.innerHTML = '';
+      setResult(text, card, data.result);
+    } catch (e) {
+      text.innerHTML = '';
+      appendResultBubble(text, `Error: ${e.message}`, false)o', { disease: name });
       text.textContent = data.result;
     } catch (e) {
       text.textContent = `Error: ${e.message}`;
@@ -452,12 +480,15 @@ const App = {
   async loadPrevention(topic) {
     const rc = document.getElementById('prevention-result');
     const rt = document.getElementById('prevention-result-text');
+    rt.innerHTML = '';
     setResult(rt, rc, 'Loading prevention guide…');
     try {
       const data = await api('/api/prevention', { topic });
-      rt.textContent = data.result;
+      rt.innerHTML = '';
+      setResult(rt, rc, data.result);
     } catch (e) {
-      rt.textContent = `Error: ${e.message}`;
+      rt.innerHTML = '';
+      appendResultBubble(rt, `Error: ${e.message}`, false);
     }
   },
 };
