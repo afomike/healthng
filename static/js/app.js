@@ -315,9 +315,10 @@ const App = {
     const div = document.createElement('div');
     div.className = `msg ${role}`;
     div.id = id;
+    const normalizedText = role === 'ai' && text ? normalizeResponseText(text) : text;
     const content = loading
       ? '<div class="loading-dots"><span></span><span></span><span></span></div>'
-      : (text || '').replace(/\n/g, '<br>');
+      : (normalizedText || '').replace(/\n/g, '<br>');
     div.innerHTML = `
       <div class="msg-avatar">${role === 'ai' ? 'AI' : 'U'}</div>
       <div class="msg-bubble">${content}</div>`;
