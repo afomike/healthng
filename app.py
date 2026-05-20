@@ -1,7 +1,9 @@
 import os
 import uuid
+import random
 import requests
 import logging
+from datetime import datetime
 from flask import Flask, request, jsonify, render_template, session
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
@@ -471,6 +473,28 @@ def configured_providers() -> list:
     return active
 
 
+HEALTH_ALERTS = [
+    {"title": "Cholera outbreak — Rivers State", "risk": "high", "label": "High risk", "detail": "New cases detected in several riverine communities."},
+    {"title": "Malaria surge — South-West regions", "risk": "med", "label": "Moderate", "detail": "Rainy-season cases are rising across urban and peri-urban zones."},
+    {"title": "Meningitis monitoring — Northern belt", "risk": "low", "label": "Watch", "detail": "Surveillance remains active in the meningitis belt."},
+    {"title": "Lassa Fever cluster — Edo", "risk": "high", "label": "High risk", "detail": "Health teams are tracking multiple suspected cases."},
+    {"title": "Yellow fever vaccination drive — North Central", "risk": "med", "label": "Moderate", "detail": "Immunization campaigns are underway in high-risk districts."},
+]
+
+
+def get_live_health_alerts():
+    sample = random.sample(HEALTH_ALERTS, k=random.randint(2, 4))
+    alerts = []
+    for item in sample:
+        alert = item.copy()
+        alert["updated"] = f"{random.randint(1, 10)}m ago"
+        alerts.append(alert)
+    return {
+        "alerts": alerts,
+        "updated_at": datetime.utcnow().strftime("%I:%M %p UTC"),
+    }
+
+
 # ── Pages ─────────────────────────────────────────────────────────────────────
 
 @app.route("/")
@@ -486,6 +510,11 @@ def app_page():
 
 
 # ── API endpoints ─────────────────────────────────────────────────────────────
+
+@app.route("/api/health-alerts")
+def api_health_alerts():
+    return jsonify(get_live_health_alerts())
+
 
 @app.route("/api/status")
 def api_status():

@@ -77,11 +77,17 @@
                 <div class="stat-card"><div class="stat-val">AI</div><div class="stat-label">Clinical insight engine</div></div>
               </div>
               <div class="card">
-                <div class="card-title">Active health alerts — Nigeria</div>
-                <div class="alert-list">
-                  <div class="alert-row alert-high"><span>Cholera outbreak — Rivers State</span><span class="risk-badge risk-high">High risk</span></div>
-                  <div class="alert-row alert-med"><span>Malaria surge — South-West regions</span><span class="risk-badge risk-med">Moderate</span></div>
-                  <div class="alert-row alert-low"><span>Meningitis monitoring — Northern belt</span><span class="risk-badge risk-low">Watch</span></div>
+                <div class="alert-header-row">
+                  <div class="card-title">Active health alerts — Nigeria</div>
+                  <div class="alert-meta">
+                    <span class="live-pill">Live</span>
+                    <span id="alert-updated">Updated just now</span>
+                  </div>
+                </div>
+                <div class="alert-list" id="alert-list">
+                  <div class="alert-row alert-high"><div><div class="alert-title">Cholera outbreak — Rivers State</div><div class="alert-note">New cases detected in several riverine communities.</div></div><div class="alert-meta-row"><span class="risk-badge risk-high">High risk</span><span class="alert-time">2m ago</span></div></div>
+                  <div class="alert-row alert-med"><div><div class="alert-title">Malaria surge — South-West regions</div><div class="alert-note">Rainy-season cases are rising across urban and peri-urban zones.</div></div><div class="alert-meta-row"><span class="risk-badge risk-med">Moderate</span><span class="alert-time">5m ago</span></div></div>
+                  <div class="alert-row alert-low"><div><div class="alert-title">Meningitis monitoring — Northern belt</div><div class="alert-note">Surveillance remains active in the meningitis belt.</div></div><div class="alert-meta-row"><span class="risk-badge risk-low">Watch</span><span class="alert-time">8m ago</span></div></div>
                 </div>
               </div>
             </section>

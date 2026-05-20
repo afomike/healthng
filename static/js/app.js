@@ -172,6 +172,7 @@ const App = {
     if (has('.nav-item')) this.bindNav();
     if (has('#send-btn') || has('#chat-input')) this.bindChat();
     if (has('#upload-zone') || has('#file-input')) this.bindUpload();
+    if (has('#alert-list')) this.bindLiveAlerts();
     if (has('.qp-btn')) this.bindQuickPrompts();
     if (has('.disease-chip')) this.bindDashboardChips();
     if (has('[data-prevention]')) this.bindPreventionChips();
@@ -367,6 +368,35 @@ const App = {
       <span class="doc-size">${Math.round(size / 1024)} KB</span>
       <span class="doc-status">✓ Loaded</span>`;
     document.getElementById('doc-list').appendChild(item);
+  },
+
+  bindLiveAlerts() {
+    this.updateHealthAlerts();
+    this.alertRefreshTimer = setInterval(() => this.updateHealthAlerts(), 10000);
+  },
+
+  async updateHealthAlerts() {
+    const list = document.getElementById('alert-list');
+    const updated = document.getElementById('alert-updated');
+    if (!list) return;
+    try {
+      const data = await api('/api/health-alerts');
+      list.innerHTML = data.alerts.map(alert => `
+        <div class="alert-row alert-${alert.risk}">
+          <div>
+            <div class="alert-title">${alert.title}</div>
+            <div class="alert-note">${alert.detail}</div>
+          </div>
+          <div class="alert-meta-row">
+            <span class="risk-badge risk-${alert.risk}">${alert.label}</span>
+            <span class="alert-time">${alert.updated}</span>
+          </div>
+        </div>`).join('');
+      if (updated) updated.textContent = `Updated ${data.updated_at}`;
+    } catch (e) {
+      console.warn('Health alert refresh failed', e);
+      if (updated) updated.textContent = 'Live updates unavailable';
+    }
   },
 
   async queryDocs(general) {
