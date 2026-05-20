@@ -1632,19 +1632,28 @@ textarea {
   .sidebar {
     width: 100%;
     min-width: unset;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 18px;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 18px 20px;
   }
 
   .nav-section {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    margin-top: 14px;
+    justify-content: flex-start;
+  }
+
+  .nav-item {
+    flex: 1 1 calc(50% - 10px);
+    min-width: 160px;
   }
 
   .topbar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 12px;
   }
 
@@ -1657,7 +1666,7 @@ textarea {
   }
 
   .chat-container {
-    height: 500px;
+    height: 520px;
   }
 
   .msg-bubble {
@@ -1732,6 +1741,7 @@ textarea {
   .nav-item {
     padding: 10px 12px;
     font-size: .9rem;
+    width: 100%;
   }
 
   .ng-flag {
@@ -1763,7 +1773,7 @@ textarea {
   }
 
   .stats-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 
@@ -1790,7 +1800,8 @@ textarea {
   }
 
   .chat-container {
-    height: 400px;
+    height: auto;
+    min-height: 420px;
   }
 
   .chat-messages {
@@ -1799,8 +1810,8 @@ textarea {
   }
 
   .msg-bubble {
-    max-width: 90%;
-    padding: 10px 12px;
+    max-width: 100%;
+    padding: 12px 14px;
   }
 
   .disease-grid {
@@ -1836,6 +1847,80 @@ textarea {
     min-height: 80px;
   }
 }
+
+@media (max-width: 480px) {
+  .site-header {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .brand-block {
+    gap: 12px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .brand-name {
+    font-size: 1rem;
+  }
+
+  .button {
+    padding: 10px 16px;
+    font-size: .9rem;
+  }
+
+  .hero-section h1 {
+    font-size: 1.8rem;
+  }
+
+  .section-heading h2 {
+    font-size: 1.5rem;
+  }
+
+  .page-content {
+    gap: 48px;
+  }
+
+  .hero-stats div,
+  .preview-avatars span,
+  .stat-card {
+    padding: 12px;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .stat-val {
+    font-size: 1.3rem;
+  }
+
+  .topbar-actions {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .sidebar {
+    padding: 12px;
+  }
+
+  .nav-item {
+    padding: 8px 10px;
+    gap: 8px;
+    font-size: .85rem;
+    width: 100%;
+  }
+
+  .content-area {
+    padding: 12px;
+  }
+}
+
 
 @media (max-width: 480px) {
   .site-header {
